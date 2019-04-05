@@ -1,19 +1,23 @@
-from marshmallow import schema, fields, post_load
+from marshmallow import Schema, fields, post_load, pprint
 from hashlib import md5
 
 sort_key = ['name', 'role']
 
 
-class Actor:
+class Actor(object):
     """
     创建actor基础类
     """
-    def __init__(self, **data):
-        for k, v in data.items():
-            setattr(self, k, v)
+    def __init__(self, name, role, grade):
+        self.name = name
+        self.role = role
+        self.grade = grade
 
     def __str__(self):
-        return self.name
+        return '<Actor_str(name={self.name!r})>'.format(self=self)
+
+    def __repr__(self):
+        return '<Actor_repr(name={self.name!r})>'.format(self=self)
 
     def __eq__(self, other):
         bools = []
@@ -28,7 +32,7 @@ class Actor:
         return m.hexdigest()
 
 
-class Movie:
+class Movie(object):
     """
     创建movie基础类
     """
@@ -36,9 +40,15 @@ class Movie:
         self.name = name
         self.actors = actors
 
+    # 重构内置的str函数
     def __str__(self):
-        return self.name
+        return '<Movie_str(name={self.name!r})>'.format(self=self)
 
+    # 重构内置的repr函数
+    def __repr__(self):
+        return '<Movie_repr(name={self.name!r})>'.format(self=self)
+
+    # 重构内置的 == 函数
     def __eq__(self, other):
         bools = []
         act1 = {actor.get_hash(): actor for actor in self.actors}
@@ -51,7 +61,7 @@ class Movie:
         return bl and all(bools) and (unique_count == 0)
 
 
-class ActorScm(schema):
+class ActorScm(Schema):
     """
     创建actor schema基础类
     """
@@ -64,7 +74,7 @@ class ActorScm(schema):
         return Actor(**data)
 
 
-class MovieScm(schema):
+class MovieScm(Schema):
     """
     创建movie schema基础类
     """
@@ -77,10 +87,20 @@ class MovieScm(schema):
 
 
 if __name__ == "__main__":
+    # 将字典反序列化为movie基础类
     actor1 = {'name': 'lucy', 'role': 'hero', 'grade': 9}
     actor2 = {'name': 'mike', 'role': 'boy', 'grade': 10}
     movie = {'name': 'green', 'actors': [actor1, actor2]}
-    # 反序列化
     schema = MovieScm()
-    movie_schema = schema.load(movie)
-    print(movie_schema.data)
+    ret = schema.load(movie)
+    # print 输出类时，调用的是__str__函数
+    print(ret)
+    # pprint 输出类时，调用的是__repr__函数
+    pprint(ret.data)
+
+    # 将movie基础类序列化为字典
+    schema = MovieScm()
+    ret_dct = schema.dump(ret.data)
+    pprint(ret_dct.data)
+
+
