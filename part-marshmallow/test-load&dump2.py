@@ -3,6 +3,9 @@ from datetime import datetime
 
 
 class VideoLog(object):
+    """
+    vlog基础类
+    """
     def __init__(self, **data):
         for k, v in data.items():
             setattr(self, k, v)
@@ -15,6 +18,9 @@ class VideoLog(object):
 
 
 class User(object):
+    """
+    user基础类
+    """
     def __init__(self, name, age, email, videos=None):
         self.name = name
         self.age = age
@@ -69,6 +75,14 @@ class TestAttributeSchema(Schema):
         return User(**data)
 
 
+# 重构，隐式字段创建
+class NewUserSchema(Schema):
+    uppername = fields.Function(lambda obj: obj.name.upper())
+
+    class Meta:
+        fields = ("name", "age", "email", "videos", "uppername")
+
+
 if __name__ == "__main__":
     # 序列化为字典 example
     video = VideoLog(title='example', content='test', created_time=datetime.now())
@@ -101,7 +115,7 @@ if __name__ == "__main__":
     new1_ret = VideoLogSchema(partial=True).load(partial_video)
     new2_ret = VideoLogSchema().load(partial_video, partial=True)
 
-    # 测试attribute，重新命名字段
+    # 测试attribute，指定属性名称
     test_user_attribute = User(name='attribute', age=23, email='new@test.com', videos=[])
     attribute_ret = TestAttributeSchema().dump(test_user_attribute)
     pprint(attribute_ret.data)
