@@ -1,4 +1,4 @@
-from plumbum import local, FG, BG
+from plumbum import local, FG, BG, cli, SshMachine, colors
 from plumbum.cmd import grep, awk, wc, head, cat, ls, tail, sudo, ifconfig
 
 
