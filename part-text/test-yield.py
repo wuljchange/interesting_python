@@ -1,4 +1,5 @@
 from collections import Iterable
+import random
 import heapq
 
 
@@ -25,3 +26,11 @@ if __name__ == "__main__":
     # str.join()只能连接字符串，非字符串的需要用sep方式隔开
     d = ["wulj", 1, 2]
     print(*d, sep=',')
+    data = {'name1': ['vau1', 'vau2'], 'name2': ['vau1', 'vau2'], 'name3': ['vau1', 'vau2']}
+    print(list(data.items()))
+    k, v = random.choice(list(data.items()))
+    data = {
+        k: random.choice(v)
+    }
+    random.choice()
+    print(data)
