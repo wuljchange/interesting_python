@@ -3,7 +3,7 @@
 # 以此类推，直到所有元素的顺序都已经确定
 
 
-def choose(data: list):
+def select_sort(data: list):
     # 外部循环只需遍历n-1次
     for i in range(len(data)-1):
         for j in range(i+1, len(data)):
@@ -14,4 +14,4 @@ def choose(data: list):
 
 if __name__ == "__main__":
     t_data = [5, 4, 3, 2, 1]
-    print(choose(t_data))
+    print(select_sort(t_data))

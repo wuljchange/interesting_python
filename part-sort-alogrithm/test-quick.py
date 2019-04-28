@@ -16,14 +16,14 @@ def partition(data, start, end):
     return i
 
 
-def ks(data: list, start, end):
+def quick_sort(data: list, start, end):
     if start < end:
         mid = partition(data, start, end)
-        ks(data, start, mid-1)
-        ks(data, mid+1, end)
+        quick_sort(data, start, mid-1)
+        quick_sort(data, mid+1, end)
     return data
 
 
 if __name__ == "__main__":
     t_data = [5, 4, 3, 2, 1]
-    print(ks(t_data, 0, 4))
+    print(quick_sort(t_data, 0, 4))

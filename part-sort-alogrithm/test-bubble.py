@@ -3,7 +3,7 @@
 # 位置，至此，数组的最右端的元素变成最大的元素，接着对剩下的n-1个元素执行相同的操作。
 
 
-def mp(data: list):
+def bubble_sort(data: list):
     # 外面的循环控制内部循环排序的次数，例如5个数，只需要4次排序就行了
     for i in range(len(data)-1):
         change = False
@@ -21,4 +21,4 @@ def mp(data: list):
 
 if __name__ == "__main__":
     t_data = [5, 4, 3, 2, 1]
-    print(mp(t_data))
+    print(bubble_sort(t_data))
