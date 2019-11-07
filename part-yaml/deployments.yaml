@@ -1,0 +1,45 @@
+# 以 rc 模式创建 cache_replay pod
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: cache-replay-deployment
+  namespace: traffic-replay
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cache-replay
+  template:
+    metadata:
+      name: cache-replay-pod
+      labels:
+        app: cache-replay
+    spec:
+      nodeSelector:
+        zone: node01
+      containers:
+      - name: test-cache-replay
+        image: hub.kce.ksyun.com/vbuqa/cache-replay:v1.0.0
+        securityContext:
+          privileged: true
+        imagePullPolicy: Always
+        args: ["-f", "baidu_locust.py", "--host=http://www.baidu.com"]
+        ports:
+        - containerPort: 8089
+        - containerPort: 5557
+        - containerPort: 5558
+---
+# 创建 service
+apiVersion: v1
+kind: Service
+metadata:
+  name: cache-replay-service
+  namespace: traffic-replay
+spec:
+  type: NodePort         // 有配置NodePort，外部流量可访问k8s中的服务
+  ports:
+  - port: 8089          // 服务访问端口
+    targetPort: 8089       // 容器端口
+    nodePort: 32001      // NodePort
+  selector:
+    name: cache-replay
