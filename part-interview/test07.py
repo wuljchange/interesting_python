@@ -28,3 +28,5 @@ class PyMongoDemo:
 if __name__ == "__main__":
     m = PyMongoDemo()
     m.get_data()
+    col = MongoClient("the_client").get_database("the_db").get_collection("the_col")
+    col.create_index([("field", 1)], unique=False)
